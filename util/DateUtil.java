@@ -2,8 +2,11 @@ package com.chen.my_project.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -204,6 +207,56 @@ public final class DataUtils {
             convertSuccess = false;
         }
         return convertSuccess;
+    }
+
+    /**
+     * 获取特定日期
+     * 
+     * <pre>
+     * field参数说明
+     *      1: 表示操作年份
+     *      2: 表示月份
+     *      3: 表示操作周
+     *      5: 表示操作天
+     * amount参数说明：
+     *      正数则为向后
+     *      负数则为向前
+     * </pre>
+     * @param date
+     * @param field
+     * @param amount
+     * @return
+     * @author ChenDuochuang
+     */
+    public static Date getSpecificDate(Date date, int field, int amount) {
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        gc.add(field, amount);
+        return gc.getTime();
+    }
+
+    /**
+     * 获取开始日期到结束日期的内的每个日期
+     * @param startDate
+     * @param endDate
+     * @return
+     * @throws ParseException
+     * @author ChenDuochuang
+     */
+    public static List<String> getEverydayDate(String startDate, String endDate) throws ParseException {
+        List<String> stringList = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
+
+        Date start = dateFormat.parse(startDate);
+        Date end = dateFormat.parse(endDate);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(start);
+        while (calendar.getTime().compareTo(end) < 1) {
+            stringList.add(dateFormat.format(calendar.getTime()));
+            calendar.add(Calendar.DATE, 1);
+        }
+        return stringList;
     }
 
     public static void test(String datetimeStr, String dateFormatStr) {
